@@ -1,0 +1,3 @@
+﻿  main.cpp
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(330): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+  tankLab.vcxproj -> C:\Users\Erik\Documents\GitHub\cg-lab-3\tankLab\tankLab\.\Debug\tankLab.exe
