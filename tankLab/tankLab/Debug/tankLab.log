@@ -1,3 +1,17 @@
 ﻿  main.cpp
-c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(330): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-  tankLab.vcxproj -> C:\Users\Erik\Documents\GitHub\cg-lab-3\tankLab\tankLab\.\Debug\tankLab.exe
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(42): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(42): error C2146: syntax error: missing ';' before identifier 'tankPartPositions'
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(55): error C2146: syntax error: missing ')' before identifier 'vec'
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(163): error C2065: 'tankPartPositions': undeclared identifier
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(163): error C3861: 'addToTankPosList': identifier not found
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(173): error C2065: 'tankPartPositions': undeclared identifier
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(173): error C3861: 'addToTankPosList': identifier not found
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(180): error C2065: 'tankPartPositions': undeclared identifier
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(180): error C3861: 'addToTankPosList': identifier not found
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(190): error C2065: 'tankPartPositions': undeclared identifier
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(190): error C3861: 'addToTankPosList': identifier not found
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(251): warning C4018: '<': signed/unsigned mismatch
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(378): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(402): error C2146: syntax error: missing ')' before identifier 'vec'
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(402): error C2143: syntax error: missing ';' before '{'
+c:\users\erik\documents\github\cg-lab-3\tanklab\tanklab\main.cpp(402): error C2447: '{': missing function header (old-style formal list?)

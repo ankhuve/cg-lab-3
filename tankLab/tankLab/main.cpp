@@ -5,6 +5,7 @@
 #pragma comment(linker, "/subsystem:console")
 
 #include "windows.h"
+#include <iostream>
 
 #include <gl/gl.h>            // standard OpenGL include
 #include <gl/glu.h>           // OpenGL utilties
@@ -19,6 +20,8 @@ using namespace MyMathLibrary;
 
 #include "objloader.h"
 
+#include "BoundingSphere.h"
+
 ObjMesh* tankBody;
 ObjMesh* tankTurret;
 ObjMesh* tankMainGun;
@@ -26,7 +29,6 @@ ObjMesh* tankSecondaryGun;
 ObjMesh* tankWheel;
 
 void load_tank_objs(void);
-
 float zPos = -30.0;
 float yRot = 0.0;
 
@@ -34,6 +36,11 @@ float turretRot = 0.0;
 float secondaryGunRot = 0.0;
 float wheelRot = 0.0;
 bool flipWheelRot = false;
+Position currGlobalPos;
+
+
+vec4 tankPartPositions[4];
+
 
 GLuint tankBodyList, tankTurretList, tankMainGunList, tankSecondaryGunList, tankWheelList;
 
@@ -45,6 +52,7 @@ void reshape(int width, int height);      //when the window is resized
 void init_drawing(void);                  //drawing intialisation
 void createWheel(float x, float y, float z);
 void drawMesh(ObjMesh *pMesh);
+void addToTankPosList(vec4 vec, float x, float y, float z, float s);
 
 //our main routine
 int main(int argc, char *argv[])
@@ -57,6 +65,10 @@ int main(int argc, char *argv[])
   glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
   //create a window and pass through the windows title
   glutCreateWindow("Basic Glut Application");
+
+  currGlobalPos.x = 0.0;
+  currGlobalPos.y = 0.0;
+  currGlobalPos.z = 0.0;
 
   //run our own drawing initialisation routine
   init_drawing();
@@ -82,6 +94,13 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+
+
+struct vec4 {
+	float x, y, z, s;
+};
+
+
 void load_tank_objs(void)
 {
   tankBody = LoadOBJ(".\\tankobjs\\tankbody.obj");
@@ -98,37 +117,50 @@ void load_tank_objs(void)
   tankWheelList = tankSecondaryGunList + 1;
 
   glNewList(tankBodyList, GL_COMPILE);
-	DrawOBJ(tankBody->m_iMeshID);
+	//DrawOBJ(tankBody->m_iMeshID);
+	drawMesh(tankBody);
   glEndList();
 
   glNewList(tankTurretList, GL_COMPILE);
-	DrawOBJ(tankTurret->m_iMeshID);
+	//DrawOBJ(tankTurret->m_iMeshID);
+	drawMesh(tankTurret);
   glEndList();
 
   glNewList(tankMainGunList, GL_COMPILE);
-	DrawOBJ(tankMainGun->m_iMeshID);
+	//DrawOBJ(tankMainGun->m_iMeshID);
+	drawMesh(tankMainGun);
   glEndList();
 
   glNewList(tankSecondaryGunList, GL_COMPILE);
-	DrawOBJ(tankSecondaryGun->m_iMeshID);
+	//DrawOBJ(tankSecondaryGun->m_iMeshID);
+	drawMesh(tankSecondaryGun);
   glEndList();
 
   glNewList(tankWheelList, GL_COMPILE);
-	DrawOBJ(tankWheel->m_iMeshID);
+	//DrawOBJ(tankWheel->m_iMeshID);
+	drawMesh(tankWheel);
   glEndList();
 
+  
+}
 
+void translateAndSavePos(float x, float y, float z) {
+	glTranslatef(x, y, z);
+	currGlobalPos.x += x;
+	currGlobalPos.y += y;
+	currGlobalPos.z += z;
 }
 
 void draw_tank(float x, float y, float z)
 {
 	glRotatef(-90, 0.0, 1.0, 0.0);
 	glPushMatrix();
-	glTranslatef(x,y,z);
+	translateAndSavePos(x,y,z);
 
 
 	glScalef(0.1,0.1,0.1);		//reduce the size of the tank on screen
 	glCallList(tankBodyList);
+	addToTankPosList(tankPartPositions[0], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
 	
 	//Use your own draw code here to draw the rest of the tank
 	//Here's the code for each individual part
@@ -136,21 +168,27 @@ void draw_tank(float x, float y, float z)
 	//you'll need to add in glPushMatrix/glTranslatef/glRotatef/glPopMatrix commands as necessary
 	glPushMatrix();
 		glRotatef(turretRot, 0.0, 1.0, 0.0);
-		glTranslatef(0.0f, 15.0f, 0.0f);
+		translateAndSavePos(0.0f, 15.0f, 0.0f);
 		glCallList(tankTurretList);
+		addToTankPosList(tankPartPositions[1], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+
 		
 
 		glPushMatrix();
-		glTranslatef(54.0f, -102.0f, 10.0f);
-		glCallList(tankMainGunList);
+		translateAndSavePos(54.0f, -102.0f, 10.0f);
+			glCallList(tankMainGunList);
+			addToTankPosList(tankPartPositions[2], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+
 		glPopMatrix();
 
 		glPushMatrix();
 		
-		glTranslatef(-12.0f, 17.0f, -15.0f);
+		translateAndSavePos(-12.0f, 17.0f, -15.0f);
 		glRotatef(secondaryGunRot, 0.0, 1.0, 0.0);
-		glTranslatef(0.0f, 0.0f, 10.0f);
+		translateAndSavePos(0.0f, 0.0f, 10.0f);
 		glCallList(tankSecondaryGunList);
+		addToTankPosList(tankPartPositions[3], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+
 
 		glPopMatrix();
 
@@ -202,7 +240,7 @@ void createWheel(float x, float y, float z)
 {
 	glPushMatrix();
 	
-	glTranslatef(x, y, z);
+	translateAndSavePos(x, y, z);
 	glRotatef((flipWheelRot) ? wheelRot : -wheelRot, 1.0, 0.0, 0.0);
 	glCallList(tankWheelList);
 	glPopMatrix();
@@ -210,14 +248,19 @@ void createWheel(float x, float y, float z)
 
 void drawMesh(ObjMesh *pMesh)
 {
-	int numFaces = pMesh->m_iNumberOfFaces;
-	for (int i = 0; i < numFaces; i++) {
+	for (int i = 0; i < pMesh->m_iNumberOfFaces; i++) {
 		ObjFace *pf = &pMesh->m_aFaces[i];
+		glBegin(GL_TRIANGLES);
 		for (int j = 0; j < 3; j++) {
-			int k = pf->m_aVertexIndices[j];
+			MyVector vertVec(pMesh->m_aVertexArray[pf->m_aVertexIndices[j]].x, pMesh->m_aVertexArray[pf->m_aVertexIndices[j]].y, pMesh->m_aVertexArray[pf->m_aVertexIndices[j]].z);
+			MyVector normVec(pMesh->m_aNormalArray[pf->m_aNormalIndices[j]].x, pMesh->m_aNormalArray[pf->m_aNormalIndices[j]].y, pMesh->m_aNormalArray[pf->m_aNormalIndices[j]].z);
+			MyVector texVec(pMesh->m_aTexCoordArray[pf->m_aTexCoordIndicies[j]].u, pMesh->m_aTexCoordArray[pf->m_aTexCoordIndicies[j]].v, 0);
+			glTexCoord2f(texVec.x, texVec.y);
+			glNormal3f(normVec.x, normVec.y, normVec.z);
+			glVertex3f(vertVec.x, vertVec.y, vertVec.z);
 		}
+		glEnd();
 	}
-	
 }
 
 //draw callback function - this is called by glut whenever the 
@@ -231,12 +274,17 @@ void draw(void)
   //initialise the modelview matrix to the identity matrix
   glLoadIdentity();
 
-  glTranslatef(0.0,0.0,zPos);
+  translateAndSavePos(0.0,0.0,zPos);
 
   glRotatef(yRot,0.0,1.0,0.0);
 
   //draw the tank on screen at a position
   draw_tank(0.0, -3.0, 0.0);
+  BoundingSphere tankBodyBound(tankBody);
+  BoundingSphere tankMainGunBound(tankMainGun);
+  BoundingSphere tankTurretBound(tankTurret);
+  BoundingSphere tankSecondaryGunBound(tankSecondaryGun);
+  BoundingSphere tankWheelBound(tankWheel);
 
   //flush what we've drawn to the buffer
   glFlush();
@@ -349,4 +397,11 @@ void init_drawing(void)
 
   glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_TEXTURE_2D);
+}
+
+void addToTankPosList(vec4 vec, float x, float y, float z, float s) {
+	vec.x = x;
+	vec.y = y;
+	vec.z = z;
+	vec.s = s;
 }
