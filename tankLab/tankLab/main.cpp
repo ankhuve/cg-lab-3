@@ -38,7 +38,6 @@ float wheelRot = 0.0;
 bool flipWheelRot = false;
 Position currGlobalPos;
 
-
 vec4 tankPartPositions[4];
 
 
@@ -95,12 +94,6 @@ int main(int argc, char *argv[])
 }
 
 
-
-struct vec4 {
-	float x, y, z, s;
-};
-
-
 void load_tank_objs(void)
 {
   tankBody = LoadOBJ(".\\tankobjs\\tankbody.obj");
@@ -155,82 +148,111 @@ void draw_tank(float x, float y, float z)
 {
 	glRotatef(-90, 0.0, 1.0, 0.0);
 	glPushMatrix();
-	translateAndSavePos(x,y,z);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		translateAndSavePos(x,y,z);
 
 
-	glScalef(0.1,0.1,0.1);		//reduce the size of the tank on screen
-	glCallList(tankBodyList);
-	addToTankPosList(tankPartPositions[0], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+		glScalef(0.1,0.1,0.1);		//reduce the size of the tank on screen
+		glCallList(tankBodyList);
+		addToTankPosList(tankPartPositions[0], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+
+		std::cout << "\nTank body:\n Global pos: " << currGlobalPos.x << ", " << currGlobalPos.y << ", " << currGlobalPos.z;
+		
+		glColor4f(1.0f, 0.0, 0.0, 0.2f);
+		BoundingSphere tankBodyBound(tankBody, tankPartPositions[0]);
+		glColor4f(1.0f, 0.0, 0.0, 1.0f);
 	
-	//Use your own draw code here to draw the rest of the tank
-	//Here's the code for each individual part
-	//Each part is placed with respect to the origin
-	//you'll need to add in glPushMatrix/glTranslatef/glRotatef/glPopMatrix commands as necessary
-	glPushMatrix();
-		glRotatef(turretRot, 0.0, 1.0, 0.0);
-		translateAndSavePos(0.0f, 15.0f, 0.0f);
-		glCallList(tankTurretList);
-		addToTankPosList(tankPartPositions[1], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
-
+		//Use your own draw code here to draw the rest of the tank
+		//Here's the code for each individual part
+		//Each part is placed with respect to the origin
+		//you'll need to add in glPushMatrix/glTranslatef/glRotatef/glPopMatrix commands as necessary
+		glPushMatrix();
+			glColor3f(0.0f, 1.0f, 0.0f);
+			glRotatef(turretRot, 0.0, 1.0, 0.0);
+			translateAndSavePos(0.0f, 15.0f, 0.0f);
+			glCallList(tankTurretList);
+			addToTankPosList(tankPartPositions[1], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+			
+			std::cout << "\nTank turret:\n Global pos: " << currGlobalPos.x << ", " << currGlobalPos.y << ", " << currGlobalPos.z;
+			
+			glColor4f(0.0f, 1.0, 0.0, 0.2f);
+			BoundingSphere tankTurretBound(tankTurret, tankPartPositions[1]);
 		
 
-		glPushMatrix();
-		translateAndSavePos(54.0f, -102.0f, 10.0f);
-			glCallList(tankMainGunList);
-			addToTankPosList(tankPartPositions[2], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+			glPushMatrix();
+			glColor4f(0.0f, 1.0, 0.0, 1.0f);
+				glColor3f(1.0f, 1.0f, 0.0f);
+				translateAndSavePos(54.0f, -102.0f, 10.0f);
+				glCallList(tankMainGunList);
+				addToTankPosList(tankPartPositions[2], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+
+				translateAndSavePos(-54.0f, 108.0f, 55.0f);
+				std::cout << "\nTank main gun:\n Global pos: " << currGlobalPos.x << ", " << currGlobalPos.y << ", " << currGlobalPos.z;
+				
+				//glColor4f(1.0, 1.0, 0.0, 0.2);
+				BoundingSphere tankMainGunBound(tankMainGun, tankPartPositions[2]);
+				translateAndSavePos(54.0f, -108.0f, -55.0f);
+
+
+			glPopMatrix();
+
+			glPushMatrix();
+				glColor4f(1.0, 1.0, 0.0, 1.0f);
+				glColor3f(0.0f, 0.0f, 1.0f);
+				translateAndSavePos(-12.0f, 17.0f, -15.0f);
+				glRotatef(secondaryGunRot, 0.0, 1.0, 0.0);
+				translateAndSavePos(0.0f, 0.0f, 10.0f);
+				glCallList(tankSecondaryGunList);
+				addToTankPosList(tankPartPositions[3], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
+
+				std::cout << "\nTank secondary gun:\n Global pos: " << currGlobalPos.x << ", " << currGlobalPos.y << ", " << currGlobalPos.z;
+				
+				glColor4f(0.0, 0.0, 1.0, 0.2);
+				BoundingSphere tankSecondaryGunBound(tankSecondaryGun, tankPartPositions[3]);
+
+			glPopMatrix();
 
 		glPopMatrix();
 
-		glPushMatrix();
-		
-		translateAndSavePos(-12.0f, 17.0f, -15.0f);
-		glRotatef(secondaryGunRot, 0.0, 1.0, 0.0);
-		translateAndSavePos(0.0f, 0.0f, 10.0f);
-		glCallList(tankSecondaryGunList);
-		addToTankPosList(tankPartPositions[3], currGlobalPos.x, currGlobalPos.y, currGlobalPos.z, 0.1);
-
-
-		glPopMatrix();
-
-	glPopMatrix();
-
 	
 
-	glPushMatrix();
-		flipWheelRot = false;
-		int zWheelPos = 43;
-		createWheel(-24, -10, zWheelPos);
-		zWheelPos -= 20;
-		createWheel(-24, -10, zWheelPos);
-		zWheelPos -= 16;
-		createWheel(-24, -10, zWheelPos);
-		zWheelPos -= 16;
-		createWheel(-24, -10, zWheelPos);
-		zWheelPos -= 16;
-		createWheel(-24, -10, zWheelPos);
-		zWheelPos -= 16;
-		createWheel(-24, -10, zWheelPos);
-		zWheelPos -= 16;
-		createWheel(-24, -10, zWheelPos);
+		glPushMatrix();
+			glColor4f(0.0, 0.0, 1.0, 1.0f);
+			glColor3f(1.0f, 1.0f, 1.0f);
+			flipWheelRot = false;
+			int zWheelPos = 43;
+			createWheel(-24, -10, zWheelPos);
+			zWheelPos -= 20;
+			createWheel(-24, -10, zWheelPos);
+			zWheelPos -= 16;
+			createWheel(-24, -10, zWheelPos);
+			zWheelPos -= 16;
+			createWheel(-24, -10, zWheelPos);
+			zWheelPos -= 16;
+			createWheel(-24, -10, zWheelPos);
+			zWheelPos -= 16;
+			createWheel(-24, -10, zWheelPos);
+			zWheelPos -= 16;
+			createWheel(-24, -10, zWheelPos);
 
-		flipWheelRot = true;
-		glRotatef(180, 0.0, 1.0, 0.0);
+			flipWheelRot = true;
+			glRotatef(180, 0.0, 1.0, 0.0);
 
-		zWheelPos = -43;
-		createWheel(-24.0f, -10.0, zWheelPos);
-		zWheelPos += 20;
-		createWheel(-24.0f, -10.0, zWheelPos);
-		zWheelPos += 16;
-		createWheel(-24.0f, -10.0, zWheelPos);
-		zWheelPos += 16;
-		createWheel(-24.0f, -10.0, zWheelPos);
-		zWheelPos += 16;
-		createWheel(-24.0f, -10.0, zWheelPos);
-		zWheelPos += 16;
-		createWheel(-24.0f, -10.0, zWheelPos);
-		zWheelPos += 16;
-		createWheel(-24.0f, -10.0, zWheelPos);
-	glPopMatrix();
+			zWheelPos = -43;
+			createWheel(-24.0f, -10.0, zWheelPos);
+			zWheelPos += 20;
+			createWheel(-24.0f, -10.0, zWheelPos);
+			zWheelPos += 16;
+			createWheel(-24.0f, -10.0, zWheelPos);
+			zWheelPos += 16;
+			createWheel(-24.0f, -10.0, zWheelPos);
+			zWheelPos += 16;
+			createWheel(-24.0f, -10.0, zWheelPos);
+			zWheelPos += 16;
+			createWheel(-24.0f, -10.0, zWheelPos);
+			zWheelPos += 16;
+			createWheel(-24.0f, -10.0, zWheelPos);
+		glPopMatrix();
 
 
 	glPopMatrix();
@@ -239,10 +261,9 @@ void draw_tank(float x, float y, float z)
 void createWheel(float x, float y, float z)
 {
 	glPushMatrix();
-	
-	translateAndSavePos(x, y, z);
-	glRotatef((flipWheelRot) ? wheelRot : -wheelRot, 1.0, 0.0, 0.0);
-	glCallList(tankWheelList);
+		translateAndSavePos(x, y, z);
+		glRotatef((flipWheelRot) ? wheelRot : -wheelRot, 1.0, 0.0, 0.0);
+		glCallList(tankWheelList);
 	glPopMatrix();
 }
 
@@ -274,17 +295,27 @@ void draw(void)
   //initialise the modelview matrix to the identity matrix
   glLoadIdentity();
 
+  // reset the global position variables
+  currGlobalPos.x = 0.0;
+  currGlobalPos.y = 0.0;
+  currGlobalPos.z = 0.0;
+
   translateAndSavePos(0.0,0.0,zPos);
 
   glRotatef(yRot,0.0,1.0,0.0);
 
+
   //draw the tank on screen at a position
   draw_tank(0.0, -3.0, 0.0);
-  BoundingSphere tankBodyBound(tankBody);
+
+  // create the bounding spheres after drawing the tank
+  /*BoundingSphere tankBodyBound(tankBody);
   BoundingSphere tankMainGunBound(tankMainGun);
   BoundingSphere tankTurretBound(tankTurret);
-  BoundingSphere tankSecondaryGunBound(tankSecondaryGun);
-  BoundingSphere tankWheelBound(tankWheel);
+  BoundingSphere tankSecondaryGunBound(tankSecondaryGun);*/
+  //BoundingSphere tankWheelBound(tankWheel);
+
+  std::cout << "\n ------------------------------";
 
   //flush what we've drawn to the buffer
   glFlush();
@@ -368,7 +399,7 @@ void init_drawing(void)
 {
   //blend colours across the surface of the polygons
   //another mode to try is GL_FLAT which is flat shading
-  glShadeModel(GL_SMOOTH);
+  glShadeModel(GL_FLAT);
   //turn lighting off
   glDisable(GL_LIGHTING);
   //enable OpenGL hidden surface removal
