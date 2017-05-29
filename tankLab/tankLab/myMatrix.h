@@ -8,9 +8,9 @@
 #include <gl/glu.h>           // OpenGL utilties
 #include <glut.h>             // OpenGL utilties
 
-namespace MyMathLibrary
-{
-
+//namespace MyMathLibrary
+//{
+//
 	class MyMatrix
 	{
 	public:
@@ -37,4 +37,4 @@ namespace MyMathLibrary
 
 		GLfloat myMatrix[16];
 	};
-}
+//}

@@ -1,7 +1,5 @@
 #include "myVector.h"
 
-using namespace MyMathLibrary;
-
 MyVector::MyVector(void)
 {
 	this->x = this->y = this->z = 0.0;

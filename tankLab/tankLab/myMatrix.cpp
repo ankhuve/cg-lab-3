@@ -1,7 +1,7 @@
 #include "myMatrix.h"
 #include <iostream>
 
-using namespace MyMathLibrary;
+//using namespace MyMathLibrary;
 
 MyMatrix::MyMatrix(void)
 {

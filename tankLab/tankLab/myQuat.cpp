@@ -1,7 +1,7 @@
 #include "MyQuat.h"
 #include <iostream>
 
-using namespace MyMathLibrary;
+//using namespace MyMathLibrary;
 
 
 MyQuat::MyQuat(void)

@@ -99,7 +99,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)\include\gl;$(SolutionDir)\SDL;$(SolutionDir)\glm;$(SolutionDir)\cg-lab-3\tankLab\tankLab;$(SolutionDir)\SDL-devel-1.2.15-VC\SDL-1.2.15\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\include\gl;$(SolutionDir)\SDL;$(SolutionDir)\glm;$(SolutionDir)\cg-lab-3\tankLab\tankLab;$(SolutionDir)\SDL-devel-1.2.15-VC\SDL-1.2.15\include;$(SolutionDir)\cg-lab-2\particleLab;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GLUT_BUILDING_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -120,7 +120,7 @@
       <AdditionalDependencies>winmm.lib;odbc32.lib;odbccp32.lib;glut32.lib;SDL.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug/tankLab.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SolutionDir)\SDL;$(ProjectDir)/libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\SDL;$(ProjectDir)/libs;$(SolutionDir)\cg-lab-2\particleLab;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/tankLab.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -140,6 +140,7 @@
     <ClCompile Include="myQuat.cpp" />
     <ClCompile Include="myVector.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="particleSystem.cpp" />
     <ClCompile Include="tgaloader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="myQuat.h" />
     <ClInclude Include="myVector.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="particleSystem.h" />
     <ClInclude Include="tgaloader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
